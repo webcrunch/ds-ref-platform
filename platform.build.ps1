@@ -3,7 +3,7 @@ param (
 )
 
 task cert_up {
-    if(get-item 0_certs/root-ca -ea 0) {
+    if (get-item 0_certs/root-ca -ea 0) {
         throw "Root CA already exists"
     }
     else {   
@@ -102,7 +102,7 @@ task bootstrap {
     $username = Read-Host -Prompt "Enter a username for the platform"
     $password = Read-Host -Prompt "Enter a password for your platform user" -MaskInput
     $stupidCharacters = '`''"$'
-    if($password -match "[$stupidCharacters]") {
+    if ($password -match "[$stupidCharacters]") {
         throw "Password cannot contain any of the following characters: $stupidCharacters (because I couldn't get the curl command to escape them :D)"
     }
     $email = Read-Host -Prompt "Enter an email for your platform user"
@@ -134,9 +134,9 @@ task prereqs {
         else {
             Write-Host "$req not found. Please install it and try again"
             $scoopInstalled = Get-Command scoop -ErrorAction SilentlyContinue
-            if(-not $scoopInstalled) {
+            if (-not $scoopInstalled) {
                 $installScoop = Read-Host -Prompt "Would you like to install scoop? (y/n)"
-                if($installScoop -eq "y") {
+                if ($installScoop -eq "y") {
                     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
                     Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
                     scoop bucket add tilt-dev https://github.com/tilt-dev/scoop-bucket
@@ -146,7 +146,7 @@ task prereqs {
                 }
             }
             $installNowWithScoop = Read-Host -Prompt "Would you like to install $req with scoop now? (y/n)"
-            if($installNowWithScoop -eq "y") {
+            if ($installNowWithScoop -eq "y") {
                 scoop install $req
             }
         }
@@ -158,10 +158,10 @@ task changebranch {
     $filesToChange = Get-ChildItem -Recurse -Filter 'gitops-*.yaml'
     foreach ($file in $filesToChange) {
         $content = Get-Content $file
-        if($content -match ": $mainbranch") {
+        if ($content -match ": $mainbranch") {
             $content = $content -replace ": $mainbranch", ": $currentBranch"
         }
-        else{
+        else {
             $content = $content -replace ": $currentBranch", ": $mainbranch"
         }
         
@@ -171,5 +171,5 @@ task changebranch {
 task cb changebranch
 task dns_local local_dns
 task init prereqs, bootstrap, cert_up, local_dns
-task up cluster_up, crossplane_up
+task up cluster_up, apps_up
 task down cluster_down

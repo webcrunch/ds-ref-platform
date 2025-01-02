@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/QuadmanSWE/ds-ref-platform
+        repoURL: https://github.com/webcrunch/ds-ref-platform
         revision: main
         directories:
           - path: 3_gitops/apps/*
@@ -19,12 +19,12 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/QuadmanSWE/ds-ref-platform
+        repoURL: https://github.com/webcrunch/ds-ref-platform
         targetRevision: main
-        path: '{{path}}'
+        path: "{{path}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: 'development'
+        namespace: "development"
       syncPolicy:
         automated:
           selfHeal: false

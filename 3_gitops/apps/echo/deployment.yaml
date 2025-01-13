@@ -16,7 +16,7 @@ spec:
         demo: first-demo
     spec:
       containers:
-        - image: ealen/echo-server:latest
+        - image: jarl:latest
           imagePullPolicy: IfNotPresent
           name: echoserver
           ports:
